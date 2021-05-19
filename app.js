@@ -13,6 +13,9 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
+app.post('/', (req, res) => {
+  res.render('result')
+})
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
 })
