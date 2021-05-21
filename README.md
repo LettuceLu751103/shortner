@@ -1,4 +1,4 @@
-## 專案名稱 [熱門餐廳搜尋網站]
+## 專案名稱 [短網址產生器]
 藉由NodeJS平台使用後端Express框架以及前端Bootstrap框架, 打造簡易的縮短網址功能的網站
 
 ### 專案畫面
@@ -22,7 +22,7 @@
 
 1. 下載專案
 ```
-git clone https://github.com/LettuceLu751103/restaurant_remote.git
+git clone https://github.com/LettuceLu751103/shortner.git
 ```
 
 
