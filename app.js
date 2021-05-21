@@ -26,17 +26,18 @@ db.once('open', () => {
 })
 
 
-
+const urlRecord = require('./models/urlRecord')
 
 
 app.get('/', (req, res) => {
   res.render('index')
 })
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
   const urlText = req.body.urlText
 
   function getKey() {
+    let newWords = ''
     const lowerCase = 'abcdefghijklmnopqrstuvwxyz'
     const upperCase = lowerCase.toUpperCase()
     const number = '0123456789'
@@ -45,19 +46,41 @@ app.post('/', (req, res) => {
     const numberArray = number.split('')
     const englishArray = lowerCaseArray.concat(upperCaseArray)
     let newArray = englishArray.concat(numberArray)
-    let newWords = ''
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 5; i++) {
       const newIndex = Math.floor(Math.random(newArray.length) * newArray.length)
       newWords += newArray[newIndex]
     }
     return newWords
   }
 
-  console.log('key:', getKey())
-  console.log('value:', urlText)
-  // 查詢資料庫有沒有相同的資料, 若是有則重新
-  res.render('result', { urlText: urlText, randomNum: getKey() })
-  // res.send(req.body)
+
+  async function checkingKey(key) {
+    const result = await urlRecord.find({ 'key': key })
+      .lean()
+      .then(data => {
+        return data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    if (result.length > 0) {
+      return true
+    }
+    return false
+  }
+
+
+  let key = await getKey()
+  let dd = await checkingKey(key)
+
+  while (dd) {
+    key = getKey()
+    dd = await checkingKey(key)
+  }
+
+  urlRecord.create({ key: key, value: urlText })
+  res.render('result', { urlText: urlText, randomNum: key })
+
 })
 
 app.listen(PORT, () => {
