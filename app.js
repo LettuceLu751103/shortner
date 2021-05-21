@@ -85,6 +85,21 @@ app.post('/', async (req, res) => {
 
 })
 
+app.get('/:key', (req, res) => {
+  const key = req.params.key
+
+  urlRecord.find({ 'key': key })
+    .lean()
+    .then(data => {
+
+      res.redirect(`http://${data[0].value}`)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+})
+
+
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
 })
