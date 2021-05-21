@@ -13,11 +13,17 @@
 
 
 <div class="h2">Success! Please use this link:</div>
-<a href='http://{{ urlText }}'>https://your-project-name.herokuapp.ccom/{{randomNum}}</a>
+<a href='http://{{ urlText }}' id="urlLink">https://your-project-name.herokuapp.ccom/{{randomNum}}</a>
 <div class="row mt-5">
   <div class="col-6 mx-auto">
     <div class="text-center">
-      <button class="btn btn-primary btn-block"> Copy </button>
+      <button class="btn btn-primary btn-block" id='copy'> Copy </button>
     </div>
+    <div class="text-center">
+      <a href="/" class="btn btn-danger btn-block mt-3">Back</a>
+    </div>
+
   </div>
 </div>
+
+<script src="/javascripts/result.js"></script>
