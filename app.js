@@ -2,8 +2,9 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 // 資料庫設定
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/urlDB'
 const mongoose = require('mongoose') // 載入 mongoose
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
@@ -12,7 +13,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 
-mongoose.connect('mongodb://localhost/urlDB', { useNewUrlParser: true, useUnifiedTopology: true }) // 設定連線到 mongoDB
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // 設定連線到 mongoDB
 
 // 取得資料庫連線狀態
 const db = mongoose.connection
