@@ -51,7 +51,7 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
 
 
 
-  async function getKey() {
+  function getKey() {
     let newWords = ''
     const lowerCase = 'abcdefghijklmnopqrstuvwxyz'
     const upperCase = lowerCase.toUpperCase()
@@ -86,11 +86,11 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
   }
 
 
-  let key = await getKey()
+  let key = getKey()
   let dd = await checkingKey(key)
 
   while (dd) {
-    key = await getKey()
+    key = getKey()
     dd = await checkingKey(key)
   }
 
@@ -106,7 +106,7 @@ app.get('/:key', (req, res) => {
     .lean()
     .then(data => {
       console.log(data[0].value)
-      res.redirect(`http://${data[0].value}`)
+      res.redirect(`${data[0].value}`)
     })
     .catch(error => {
       console.log(error)
