@@ -105,7 +105,7 @@ app.get('/:key', (req, res) => {
   urlRecord.find({ 'key': key })
     .lean()
     .then(data => {
-
+      console.log(data[0].value)
       res.redirect(`http://${data[0].value}`)
     })
     .catch(error => {
