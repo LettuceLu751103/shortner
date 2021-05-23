@@ -112,7 +112,7 @@ app.get('/:key', async (req, res) => {
 
     if (obj) {
       const urlText = obj.value
-      if (urlText.includes('http://')) {
+      if (urlText.includes('http://') || urlText.includes('https://')) {
         return res.redirect(urlText)
       } else {
         return res.redirect(`http://${urlText}`)
