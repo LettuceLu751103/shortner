@@ -85,7 +85,6 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
     return urlRecord.findOne({ value: urlText })
       .lean()
       .then(obj => {
-        console.log(obj)
         res.render('result', { urlText: urlText, randomNum: obj.key })
       })
       .catch(error => {
@@ -106,18 +105,20 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
 
 })
 
-app.get('/:key', (req, res) => {
+app.get('/:key', async (req, res) => {
   const key = req.params.key
 
-  urlRecord.find({ 'key': key })
-    .lean()
-    .then(data => {
-      console.log(data[0].value)
-      res.redirect(`${data[0].value}`)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  return urlRecord.findOne({ 'key': key }).lean().then(obj => {
+    console.log(typeof obj)
+    if (!obj) {
+      return res.send('have error')
+    }
+    else {
+      return res.redirect(obj.value)
+
+    }
+  })
+
 })
 
 
