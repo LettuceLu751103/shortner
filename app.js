@@ -109,14 +109,27 @@ app.get('/:key', async (req, res) => {
   const key = req.params.key
 
   return urlRecord.findOne({ 'key': key }).lean().then(obj => {
-    console.log(typeof obj)
-    if (!obj) {
-      return res.send('have error')
-    }
-    else {
-      return res.redirect(obj.value)
 
+    if (obj) {
+      const urlText = obj.value
+      if (urlText.includes('http://')) {
+        return res.redirect(urlText)
+      } else {
+        return res.redirect(`http://${urlText}`)
+      }
+    } else {
+      return res.render('linkErr', { err: 'Invalid shortCode : Not in DB!' })
     }
+
+    // if (!obj) {
+    //   return res.send('have error')
+    // }
+    // else {
+    //   return res.redirect(obj.value)
+
+    // }
+  }).catch(err => {
+    console.log(err)
   })
 
 })

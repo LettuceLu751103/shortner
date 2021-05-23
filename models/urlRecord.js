@@ -3,11 +3,13 @@ const Schema = mongoose.Schema
 const urlRecordSchema = new Schema({
   key: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   value: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 })
 
