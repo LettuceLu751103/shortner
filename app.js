@@ -47,27 +47,21 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
     return res.render('index', { urlText, errMsg, isInvalidUrl: true })
   }
 
-
-
-
-
   function getKey() {
     let newWords = ''
     const lowerCase = 'abcdefghijklmnopqrstuvwxyz'
     const upperCase = lowerCase.toUpperCase()
     const number = '0123456789'
-    const lowerCaseArray = lowerCase.split('')
-    const upperCaseArray = upperCase.split('')
-    const numberArray = number.split('')
-    const englishArray = lowerCaseArray.concat(upperCaseArray)
-    let newArray = englishArray.concat(numberArray)
+    const english = lowerCase.concat(upperCase)
+    let newArray = english.concat(number)
+    newArray = newArray.split('')
+
     for (let i = 0; i < 5; i++) {
       const newIndex = Math.floor(Math.random(newArray.length) * newArray.length)
       newWords += newArray[newIndex]
     }
     return newWords
   }
-
 
   async function checkingKey(key) {
     const result = await urlRecord.find({ 'key': key })
@@ -85,6 +79,19 @@ app.post('/', body('urlText').isURL(), async (req, res) => {
     return false
   }
 
+  // 加一個如果在資料庫中找的到長網址, 則直接返回結果跳轉到 result 頁面
+  const isUrlExist = await urlRecord.exists({ value: urlText })
+  if (isUrlExist) {
+    return urlRecord.findOne({ value: urlText })
+      .lean()
+      .then(obj => {
+        console.log(obj)
+        res.render('result', { urlText: urlText, randomNum: obj.key })
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   let key = getKey()
   let dd = await checkingKey(key)
