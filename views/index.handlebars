@@ -15,7 +15,12 @@
 <form action="/" method="POST">
   <div class="form-group">
     <input type="text" class="form-control form-control-lg bg-light" id="urlText" placeholder="Input URL here"
-      name="urlText">
+      name="urlText" value='{{ errMsg.value }}'>
+    {{#if isInvalidUrl}}
+    <div class="alert alert-danger mt-2" role="alert">
+      <span class="text-danger">{{ errMsg.value }}</span> <span class="text-primary">是不合法的 URL, 請重新輸入!!!
+    </div></span>
+    {{/if}}
   </div>
   <div class="row justify-content-center mt-3">
     <div class="text-center col-6">

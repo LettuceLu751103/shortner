@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 3000
 // 資料庫設定
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/urlDB'
 const mongoose = require('mongoose') // 載入 mongoose
+const { body, validationResult } = require('express-validator')
+
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -34,8 +36,20 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-app.post('/', async (req, res) => {
+
+app.post('/', body('urlText').isURL(), async (req, res) => {
   const urlText = req.body.urlText
+  const errors = validationResult(req);
+  const urlValidator = body(urlText).isURL().withMessage('Invalid Url Format. Please Enter valid Url!')
+
+  if (!errors.isEmpty()) {
+    const [errMsg] = errors.array()
+    return res.render('index', { urlText, errMsg, isInvalidUrl: true })
+  }
+
+
+
+
 
   async function getKey() {
     let newWords = ''
@@ -98,6 +112,9 @@ app.get('/:key', (req, res) => {
       console.log(error)
     })
 })
+
+
+
 
 
 app.listen(PORT, () => {
